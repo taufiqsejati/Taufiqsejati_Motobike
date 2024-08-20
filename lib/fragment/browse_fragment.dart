@@ -1,7 +1,11 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:taufiqsejati_motobike/controllers/browse_featured_controller.dart';
+import 'package:taufiqsejati_motobike/models/bike.dart';
+import 'package:taufiqsejati_motobike/widgets/failed_ui.dart';
 
 class BrowseFragment extends StatefulWidget {
   const BrowseFragment({super.key});
@@ -35,8 +39,77 @@ class _BrowseFragmentState extends State<BrowseFragment> {
         Gap(30 + MediaQuery.of(context).padding.top),
         buildHeader(),
         const Gap(20),
-        buildCategory()
+        buildCategory(),
+        const Gap(20),
+        buildFeatured()
       ],
+    );
+  }
+
+  Widget buildFeatured() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24),
+          child: Text(
+            'Featured',
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Color(0xff070623)),
+          ),
+        ),
+        const Gap(10),
+        Obx(() {
+          String status = browseFeaturedController.status;
+          if (status == "") return const SizedBox();
+          if (status == "loading") {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (status != "success") {
+            return const Center(
+              child: FailedUI(message: 'problem'),
+            );
+          }
+          List<Bike> list = browseFeaturedController.list;
+          return SizedBox(
+            height: 295,
+            child: ListView.builder(
+                itemCount: list.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  Bike bike = list[index];
+                  final margin = EdgeInsets.only(
+                      left: index == 0 ? 24 : 12,
+                      right: index == list.length - 1 ? 24 : 12);
+                  bool isTrending = index == 0;
+                  return buildItemFeatured(bike, margin, isTrending);
+                }),
+          );
+        })
+      ],
+    );
+  }
+
+  buildItemFeatured(Bike bike, EdgeInsetsGeometry margin, bool isTrending) {
+    return Container(
+      width: 252,
+      margin: margin,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(16)),
+      child: Column(
+        children: [
+          ExtendedImage.network(
+            bike.image,
+            width: 220,
+            height: 170,
+          )
+        ],
+      ),
     );
   }
 

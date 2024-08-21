@@ -1,9 +1,13 @@
+import 'package:d_session/d_session.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:taufiqsejati_motobike/fragment/browse_fragment.dart';
-import 'package:taufiqsejati_motobike/fragment/orders_fragment.dart';
-import 'package:taufiqsejati_motobike/fragment/settings_fragmanet.dart';
+import 'package:taufiqsejati_motobike/common/info.dart';
+import 'package:taufiqsejati_motobike/models/account.dart';
+import 'package:taufiqsejati_motobike/pages/fragment/browse_fragment.dart';
+import 'package:taufiqsejati_motobike/pages/fragment/orders_fragment.dart';
+import 'package:taufiqsejati_motobike/pages/fragment/settings_fragmanet.dart';
+import 'package:taufiqsejati_motobike/sources/chat_source.dart';
 
 class DiscoverPage extends StatefulWidget {
   const DiscoverPage({super.key});
@@ -19,6 +23,17 @@ class _DiscoverPageState extends State<DiscoverPage> {
     const SettingsFragment()
   ];
   final fragmentIndex = 0.obs;
+
+  late final Account account;
+
+  @override
+  void initState() {
+    DSession.getUser().then((value) {
+      account = Account.fromJson(Map.from(value!));
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +73,14 @@ class _DiscoverPageState extends State<DiscoverPage> {
                   icon: 'assets/ic_chats.png',
                   iconOn: 'assets/ic_chats_on.png',
                   onTap: () {
-                    // fragmentIndex.value = 2;
+                    Info.netral('Loading...');
+                    ChatSource.openChatRoom(account.uid, account.name)
+                        .then((value) {
+                      Navigator.pushNamed(context, '/chatting', arguments: {
+                        'uid': account.uid,
+                        'userName': account.name,
+                      });
+                    });
                   },
                   // isActive: fragmentIndex.value == 2,
                   hasDot: true),

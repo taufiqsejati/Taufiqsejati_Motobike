@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
         },
         '/pin': (context) {
           Bike bike = ModalRoute.of(context)!.settings.arguments as Bike;
-          return PinPage(bike: bike);
+          return PINPage(bike: bike);
         },
         '/success-booking': (context) {
           Bike bike = ModalRoute.of(context)!.settings.arguments as Bike;

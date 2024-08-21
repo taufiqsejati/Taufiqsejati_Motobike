@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import '../models/bike.dart';
 
 class BikeSource {
@@ -17,12 +18,11 @@ class BikeSource {
     }
   }
 
-  static Future<List<Bike>?> fetchNewstBikes() async {
+  static Future<List<Bike>?> fetchNewestBikes() async {
     try {
       final ref = FirebaseFirestore.instance
           .collection('Bikes')
-          .orderBy('release', descending: true)
-          .limit(4);
+          .orderBy('release', descending: true);
       final queryDocs = await ref.get();
       return queryDocs.docs.map((doc) => Bike.fromJson(doc.data())).toList();
     } catch (e) {

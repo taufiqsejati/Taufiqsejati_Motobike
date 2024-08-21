@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:taufiqsejati_motobike/models/bike.dart';
 import 'package:taufiqsejati_motobike/sources/bike_source.dart';
 
-class BrowseFeaturedController extends GetxController {
+class BrowseNewestController extends GetxController {
   final _list = <Bike>[].obs;
   List<Bike> get list => _list;
   set list(List<Bike> n) => _list.value = n;
@@ -12,18 +12,18 @@ class BrowseFeaturedController extends GetxController {
   String get status => _status.value;
   set status(String n) => _status.value = n;
 
-  fetchFeatured() async {
+  fetchNewest() async {
     status = 'loading';
 
-    final bikes = await BikeSource.fetchFeaturedBikes();
+    final bikes = await BikeSource.fetchNewestBikes();
     if (bikes == null) {
       status = 'something wrong';
-      debugPrint('failed featured : ${list.length.toString()}');
+      debugPrint('failed newest : ${list.length.toString()}');
       return;
     }
 
     status = 'success';
     list = bikes;
-    debugPrint('sukses featured : ${list.length.toString()}');
+    debugPrint('sukses newest : ${list.length.toString()}');
   }
 }

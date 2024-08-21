@@ -2,7 +2,7 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:taufiqsejati_motobike/common/info.dart';
-import 'package:taufiqsejati_motobike/source/auth_source.dart';
+import 'package:taufiqsejati_motobike/sources/auth_source.dart';
 import 'package:taufiqsejati_motobike/widgets/button_primary.dart';
 import 'package:taufiqsejati_motobike/widgets/input.dart';
 

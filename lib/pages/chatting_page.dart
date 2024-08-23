@@ -39,7 +39,7 @@ class _ChattingPageState extends State<ChattingPage> {
     return Scaffold(
       body: Column(
         children: [
-          Gap(20 + MediaQuery.of(context).padding.top),
+          Gap(MediaQuery.of(context).padding.top),
           buildHeader(),
           Expanded(child: buildChats()),
           buildInputChat(),
@@ -250,7 +250,7 @@ class _ChattingPageState extends State<ChattingPage> {
 
   Widget buildHeader() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
       child: Row(
         children: [
           GestureDetector(
@@ -281,20 +281,24 @@ class _ChattingPageState extends State<ChattingPage> {
               ),
             ),
           ),
-          Container(
+          const SizedBox(
             height: 46,
             width: 46,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-            ),
-            alignment: Alignment.center,
-            child: Image.asset(
-              'assets/ic_more.png',
-              height: 24,
-              width: 24,
-            ),
-          ),
+          )
+          // Container(
+          //   height: 46,
+          //   width: 46,
+          //   decoration: const BoxDecoration(
+          //     shape: BoxShape.circle,
+          //     color: Colors.white,
+          //   ),
+          //   alignment: Alignment.center,
+          //   child: Image.asset(
+          //     'assets/ic_more.png',
+          //     height: 24,
+          //     width: 24,
+          //   ),
+          // ),
         ],
       ),
     );

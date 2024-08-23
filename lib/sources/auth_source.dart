@@ -59,4 +59,27 @@ class AuthSource {
       return 'something wrong';
     }
   }
+
+  static Future<String> changePassword(
+      String currentPassword, String newPassword, String email) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      // Reauthenticate the user.
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: email,
+        password: currentPassword,
+      );
+      await user?.reauthenticateWithCredential(credential);
+
+      // If reauthentication is successful, change the password.
+      await user?.updatePassword(newPassword);
+
+      // Password changed successfully.
+      return 'success';
+    } catch (e) {
+      // Handle reauthentication errors and password change errors.
+      return 'Error changing password: $e';
+    }
+  }
 }

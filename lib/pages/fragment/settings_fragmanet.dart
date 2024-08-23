@@ -20,48 +20,69 @@ class _SettingsFragmentState extends State<SettingsFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(0),
-      children: [
-        Gap(30 + MediaQuery.of(context).padding.top),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24),
-          child: Text(
-            'My Settings',
-            style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                color: Color(0xff070623)),
-          ),
-        ),
-        const Gap(20),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 24),
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(20)),
-          child: Column(
+    return FutureBuilder(
+        future: DSession.getUser(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          Account account = Account.fromJson(Map.from(snapshot.data!));
+          return ListView(
+            padding: const EdgeInsets.all(0),
             children: [
-              buildProfile(),
-              const Gap(30),
-              buildItemSetting('assets/ic_profile.png', 'Edit Profile', null),
+              Gap(30 + MediaQuery.of(context).padding.top),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                child: Text(
+                  'My Settings',
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xff070623)),
+                ),
+              ),
               const Gap(20),
-              buildItemSetting(
-                  'assets/ic_wallet.png', 'My Digital Wallet', null),
-              const Gap(20),
-              buildItemSetting('assets/ic_rate.png', 'rate This App', null),
-              const Gap(20),
-              buildItemSetting('assets/ic_key.png', 'Change Password', null),
-              const Gap(20),
-              buildItemSetting(
-                  'assets/ic_interest.png', 'Interest Personalized', null),
-              const Gap(20),
-              buildItemSetting('assets/ic_logout.png', 'Logout', logout),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20)),
+                child: Column(
+                  children: [
+                    buildProfile(account),
+                    const Gap(30),
+                    buildItemSetting(
+                        'assets/ic_profile.png', 'Edit Profile', null),
+                    // const Gap(20),
+                    // buildItemSetting(
+                    //     'assets/ic_wallet.png', 'My Digital Wallet', null),
+                    // const Gap(20),
+                    // buildItemSetting('assets/ic_rate.png', 'rate This App', null),
+                    const Gap(20),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/changePassword',
+                            arguments: account.email,
+                          );
+                        },
+                        child: buildItemSetting(
+                            'assets/ic_key.png', 'Change Password', null)),
+                    // const Gap(20),
+                    // buildItemSetting(
+                    //     'assets/ic_interest.png', 'Interest Personalized', null),
+                    const Gap(20),
+                    buildItemSetting('assets/ic_logout.png', 'Logout', logout),
+                  ],
+                ),
+              )
             ],
-          ),
-        )
-      ],
-    );
+          );
+        });
   }
 
   Widget buildItemSetting(String icon, String name, VoidCallback? onTap) {
@@ -101,46 +122,36 @@ class _SettingsFragmentState extends State<SettingsFragment> {
     );
   }
 
-  Widget buildProfile() {
-    return FutureBuilder(
-        future: DSession.getUser(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          Account account = Account.fromJson(Map.from(snapshot.data!));
-          return Row(
-            children: [
-              Image.asset(
-                'assets/profile.png',
-                width: 50,
-                height: 50,
-              ),
-              const Gap(8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    account.name,
-                    style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xff070623)),
-                  ),
-                  const Gap(2),
-                  Text(
-                    account.email,
-                    style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xff838384)),
-                  ),
-                ],
-              )
-            ],
-          );
-        });
+  Widget buildProfile(Account account) {
+    return Row(
+      children: [
+        Image.asset(
+          'assets/profile.png',
+          width: 50,
+          height: 50,
+        ),
+        const Gap(8),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              account.name,
+              style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xff070623)),
+            ),
+            const Gap(2),
+            Text(
+              account.email,
+              style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xff838384)),
+            ),
+          ],
+        )
+      ],
+    );
   }
 }

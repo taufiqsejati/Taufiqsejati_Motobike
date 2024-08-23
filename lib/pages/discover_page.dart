@@ -67,7 +67,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 },
                 isActive: fragmentIndex.value == 1,
               ),
-              buildItemCircle(),
+              // buildItemCircle(),
               buildItemNav(
                   label: 'Chats',
                   icon: 'assets/ic_chats.png',

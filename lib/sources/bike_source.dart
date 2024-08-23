@@ -31,6 +31,20 @@ class BikeSource {
     }
   }
 
+  static Future<List<Bike>?> fetchCategoryBikes(String categoryId) async {
+    try {
+      final ref = FirebaseFirestore.instance
+          .collection('Bikes')
+          .where('category', isEqualTo: categoryId)
+          .orderBy('category', descending: true);
+      final queryDocs = await ref.get();
+      return queryDocs.docs.map((doc) => Bike.fromJson(doc.data())).toList();
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
   static Future<Bike?> fetchBike(String bikeId) async {
     try {
       final ref = FirebaseFirestore.instance.collection('Bikes').doc(bikeId);

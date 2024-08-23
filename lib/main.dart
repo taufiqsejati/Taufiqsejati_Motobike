@@ -3,6 +3,8 @@ import 'package:d_session/d_session.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:taufiqsejati_motobike/pages/change_password_page.dart';
+import 'package:taufiqsejati_motobike/pages/detail_category_page.dart';
 
 import 'firebase_options.dart';
 import 'models/bike.dart';
@@ -61,6 +63,15 @@ class MyApp extends StatelessWidget {
           String bikeId = ModalRoute.of(context)!.settings.arguments as String;
           return DetailPage(bikeId: bikeId);
         },
+        '/detailCategory': (context) {
+          String categoryId =
+              ModalRoute.of(context)!.settings.arguments as String;
+          return DetailCategoryPage(
+            categoryId: categoryId,
+          );
+          // String bikeId = ModalRoute.of(context)!.settings.arguments as String;
+          // return DetailCategoryPage(bikeId: bikeId);
+        },
         '/booking': (context) {
           Bike bike = ModalRoute.of(context)!.settings.arguments as Bike;
           return BookingPage(bike: bike);
@@ -91,6 +102,13 @@ class MyApp extends StatelessWidget {
           return ChattingPage(
             uid: uid,
             userName: userName,
+          );
+        },
+        '/changePassword': (context) {
+          String accountEmail =
+              ModalRoute.of(context)!.settings.arguments as String;
+          return ChangePasswordPage(
+            accountEmail: accountEmail,
           );
         },
       },

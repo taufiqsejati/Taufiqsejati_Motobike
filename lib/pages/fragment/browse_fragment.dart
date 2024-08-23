@@ -443,29 +443,35 @@ class _BrowseFragmentState extends State<BrowseFragment> {
             child: Row(
               children: categories.map(
                 (e) {
-                  return Container(
-                    height: 52,
-                    margin: const EdgeInsets.only(right: 24),
-                    padding: const EdgeInsets.fromLTRB(16, 14, 30, 14),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: Colors.white),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          e[1],
-                          width: 24,
-                          height: 24,
-                        ),
-                        const Gap(10),
-                        Text(
-                          e[0],
-                          style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xff070623)),
-                        )
-                      ],
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/detailCategory',
+                          arguments: e[0]);
+                    },
+                    child: Container(
+                      height: 52,
+                      margin: const EdgeInsets.only(right: 24),
+                      padding: const EdgeInsets.fromLTRB(16, 14, 30, 14),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: Colors.white),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            e[1],
+                            width: 24,
+                            height: 24,
+                          ),
+                          const Gap(10),
+                          Text(
+                            e[0],
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xff070623)),
+                          )
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -488,18 +494,19 @@ class _BrowseFragmentState extends State<BrowseFragment> {
             height: 38,
             fit: BoxFit.fitHeight,
           ),
-          Container(
-            height: 46,
-            width: 46,
-            decoration: const BoxDecoration(
-                color: Colors.white, shape: BoxShape.circle),
-            alignment: Alignment.center,
-            child: Image.asset(
-              'assets/ic_notification.png',
-              height: 24,
-              width: 24,
-            ),
-          )
+          const SizedBox()
+          // Container(
+          //   height: 46,
+          //   width: 46,
+          //   decoration: const BoxDecoration(
+          //       color: Colors.white, shape: BoxShape.circle),
+          //   alignment: Alignment.center,
+          //   child: Image.asset(
+          //     'assets/ic_notification.png',
+          //     height: 24,
+          //     width: 24,
+          //   ),
+          // )
         ],
       ),
     );

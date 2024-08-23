@@ -43,7 +43,7 @@ class _DetailPageState extends State<DetailPage> {
       body: ListView(
         padding: const EdgeInsets.all(0),
         children: [
-          Gap(20 + MediaQuery.of(context).padding.top),
+          Gap(MediaQuery.of(context).padding.top),
           buildHeader(),
           const Gap(30),
           Obx(() {
@@ -270,7 +270,7 @@ class _DetailPageState extends State<DetailPage> {
 
   Widget buildHeader() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
       child: Row(
         children: [
           GestureDetector(
@@ -301,20 +301,24 @@ class _DetailPageState extends State<DetailPage> {
               ),
             ),
           ),
-          Container(
+          const SizedBox(
             height: 46,
             width: 46,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-            ),
-            alignment: Alignment.center,
-            child: Image.asset(
-              'assets/ic_favorite.png',
-              height: 24,
-              width: 24,
-            ),
-          ),
+          )
+          // Container(
+          //   height: 46,
+          //   width: 46,
+          //   decoration: const BoxDecoration(
+          //     shape: BoxShape.circle,
+          //     color: Colors.white,
+          //   ),
+          //   alignment: Alignment.center,
+          //   child: Image.asset(
+          //     'assets/ic_favorite.png',
+          //     height: 24,
+          //     width: 24,
+          //   ),
+          // ),
         ],
       ),
     );

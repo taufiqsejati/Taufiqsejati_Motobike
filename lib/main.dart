@@ -3,8 +3,10 @@ import 'package:d_session/d_session.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:taufiqsejati_motobike/models/account.dart';
 import 'package:taufiqsejati_motobike/pages/change_password_page.dart';
 import 'package:taufiqsejati_motobike/pages/detail_category_page.dart';
+import 'package:taufiqsejati_motobike/pages/edit_profile_page.dart';
 
 import 'firebase_options.dart';
 import 'models/bike.dart';
@@ -109,6 +111,13 @@ class MyApp extends StatelessWidget {
               ModalRoute.of(context)!.settings.arguments as String;
           return ChangePasswordPage(
             accountEmail: accountEmail,
+          );
+        },
+        '/editProfile': (context) {
+          Account account =
+              ModalRoute.of(context)!.settings.arguments as Account;
+          return EditProfilePage(
+            account: account,
           );
         },
       },

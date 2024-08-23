@@ -54,8 +54,17 @@ class _SettingsFragmentState extends State<SettingsFragment> {
                   children: [
                     buildProfile(account),
                     const Gap(30),
-                    buildItemSetting(
-                        'assets/ic_profile.png', 'Edit Profile', null),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/editProfile',
+                          arguments: account,
+                        );
+                      },
+                      child: buildItemSetting(
+                          'assets/ic_profile.png', 'Edit Profile', null),
+                    ),
                     // const Gap(20),
                     // buildItemSetting(
                     //     'assets/ic_wallet.png', 'My Digital Wallet', null),

@@ -35,29 +35,52 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.initState();
   }
 
-  // editEmail() {
-  //   if (edtEmail.text == '') return Info.error('Email must be filled');
-  //   if (edtName.text == '') return Info.error('Name must be filled');
-  //   if (edtUID.text == '') return Info.error('Name must be filled');
+  editEmailName() {
+    if (edtEmail.text == '') return Info.error('Email must be filled');
+    if (edtName.text == '') return Info.error('Name must be filled');
+    if (edtUID.text == '') return Info.error('Name must be filled');
 
-  //   Info.netral('Loading..');
-  //   AuthSource.resetEmail(
-  //     edtEmail.text,
-  //   ).then((message) {
-  //     if (message != 'success') return Info.error(message);
+    Info.netral('Loading..');
+    AuthSource.editEmailName(edtEmail.text, edtName.text, account)
+        .then((message) {
+      if (message != 'success') return Info.error(message);
 
-  //     //success
-  //     Info.success('Success Change Email');
-  //     Info.success(
-  //         'Konfirmasi Perubahan Email dikirimkan \nke Email Terbaru Anda');
-  //     Future.delayed(const Duration(milliseconds: 1500), () {
-  //       DSession.removeUser().then((removed) {
-  //         if (!removed) return;
-  //         Navigator.pushReplacementNamed(context, '/signin');
-  //       });
-  //     });
-  //   });
-  // }
+      //success
+      Info.success('Success Change Email & Name');
+      Info.success(
+          'Konfirmasi Perubahan Email dikirimkan \nke Email Terbaru Anda');
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        DSession.removeUser().then((removed) {
+          if (!removed) return;
+          Navigator.pushReplacementNamed(context, '/signin');
+        });
+      });
+    });
+  }
+
+  editEmailOnly() {
+    if (edtEmail.text == '') return Info.error('Email must be filled');
+    if (edtName.text == '') return Info.error('Name must be filled');
+    if (edtUID.text == '') return Info.error('Name must be filled');
+
+    Info.netral('Loading..');
+    AuthSource.resetEmail(
+      edtEmail.text,
+    ).then((message) {
+      if (message != 'success') return Info.error(message);
+
+      //success
+      Info.success('Success Change Email');
+      Info.success(
+          'Konfirmasi Perubahan Email dikirimkan \nke Email Terbaru Anda');
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        DSession.removeUser().then((removed) {
+          if (!removed) return;
+          Navigator.pushReplacementNamed(context, '/signin');
+        });
+      });
+    });
+  }
 
   editNameOnly() {
     if (edtEmail.text == '') return Info.error('Email must be filled');
@@ -204,12 +227,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       debugPrint('email&name sama');
                     } else if (edtEmail.text != widget.account.email &&
                         edtName.text != widget.account.name) {
+                      editEmailName();
                       debugPrint('email&name tidak sama #type1');
                       //update email serta update name kemudian logout
                       // -> source resetEmail + source changeAccount
                       //source signin kemudian session tulis email
                     } else if (edtEmail.text != widget.account.email &&
                         edtName.text == widget.account.name) {
+                      editEmailOnly();
                       debugPrint('email tidak sama & name sama #type2');
                       //update email kemudian logout -> source resetEmail
                       //source signin kemudian session tulis email

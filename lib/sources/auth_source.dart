@@ -44,7 +44,7 @@ class AuthSource {
           .collection('Users')
           .doc(credential.user!.uid)
           .get();
-      changeAccount(email, Map.from(accountDoc.data()!));
+      await editEmailOnly(email, Map.from(accountDoc.data()!));
       // await DSession.setUser(Map.from(accountDoc.data()!));
       return 'success';
     } on FirebaseAuthException catch (e) {
@@ -95,26 +95,48 @@ class AuthSource {
     }
   }
 
-  static Future<void> changeAccount(String email, Map args) async {
-    // final credential = await FirebaseAuth.instance
-    //     .signInWithEmailAndPassword(email: email, password: password);
-    // final doc =
-    //     await FirebaseFirestore.instance.collection('CS').doc(uid).get();
-    await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(args['uid'])
-        .update({'email': email, 'name': args['name']});
-    await DSession.setUser(Map.from({
-      'email': email,
-      'name': args['name'],
-      'uid': args['uid'],
-    }));
-    return;
+  static Future<String> editEmailName(
+      String newEmail, String name, Account args) async {
+    try {
+      // await FirebaseFirestore.instance
+      //     .collection('Users')
+      //     .doc(args['uid'])
+      //     .update({'email': email, 'name': name});
+      // await DSession.setUser(Map.from({
+      //   'email': email,
+      //   'name': name,
+      //   'uid': args['uid'],
+      // }));
+      User? user = FirebaseAuth.instance.currentUser;
+      await editNameOnly(name, args);
+      await user?.verifyBeforeUpdateEmail(newEmail);
+      return 'success';
+    } catch (e) {
+      log(e.toString());
+      return 'something wrong';
+    }
+  }
+
+  static Future<void> editEmailOnly(String email, Map args) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(args['uid'])
+          .update({'email': email});
+      await DSession.setUser(Map.from({
+        'email': email,
+        'name': args['name'],
+        'uid': args['uid'],
+      }));
+      return;
+    } catch (e) {
+      log(e.toString());
+      return;
+    }
   }
 
   static Future<String> editNameOnly(String name, Account args) async {
     try {
-      // User? user = FirebaseAuth.instance.currentUser;
       await FirebaseFirestore.instance
           .collection('Users')
           .doc(args.uid)

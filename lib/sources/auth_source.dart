@@ -44,7 +44,8 @@ class AuthSource {
           .collection('Users')
           .doc(credential.user!.uid)
           .get();
-      await DSession.setUser(Map.from(accountDoc.data()!));
+      changeAccount(email, Map.from(accountDoc.data()!));
+      // await DSession.setUser(Map.from(accountDoc.data()!));
       return 'success';
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -80,6 +81,50 @@ class AuthSource {
     } catch (e) {
       // Handle reauthentication errors and password change errors.
       return 'Error changing password: $e';
+    }
+  }
+
+  static Future<String> resetEmail(String newEmail) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      await user?.verifyBeforeUpdateEmail(newEmail);
+      return 'success';
+    } catch (e) {
+      // Handle reauthentication errors and password change errors.
+      return 'Error changing email: $e';
+    }
+  }
+
+  static Future<void> changeAccount(String email, Map args) async {
+    // final credential = await FirebaseAuth.instance
+    //     .signInWithEmailAndPassword(email: email, password: password);
+    // final doc =
+    //     await FirebaseFirestore.instance.collection('CS').doc(uid).get();
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(args['uid'])
+        .update({'email': email, 'name': args['name']});
+    await DSession.setUser(Map.from({
+      'email': email,
+      'name': args['name'],
+      'uid': args['uid'],
+    }));
+    return;
+  }
+
+  static Future<String> editNameOnly(String name, Account args) async {
+    try {
+      // User? user = FirebaseAuth.instance.currentUser;
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(args.uid)
+          .update({'name': name});
+      await DSession.setUser(
+          {'email': args.email, 'name': name, 'uid': args.uid});
+      return 'success';
+    } catch (e) {
+      log(e.toString());
+      return 'something wrong';
     }
   }
 }

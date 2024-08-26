@@ -20,6 +20,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final edtName = TextEditingController();
   final edtUID = TextEditingController();
 
+  late final Account account;
+
   @override
   void initState() {
     setState(() {
@@ -27,31 +29,57 @@ class _EditProfilePageState extends State<EditProfilePage> {
       edtName.text = widget.account.name;
       edtUID.text = widget.account.uid;
     });
+    DSession.getUser().then((value) {
+      account = Account.fromJson(Map.from(value!));
+    });
     super.initState();
   }
 
-  editProfile() {
+  // editEmail() {
+  //   if (edtEmail.text == '') return Info.error('Email must be filled');
+  //   if (edtName.text == '') return Info.error('Name must be filled');
+  //   if (edtUID.text == '') return Info.error('Name must be filled');
+
+  //   Info.netral('Loading..');
+  //   AuthSource.resetEmail(
+  //     edtEmail.text,
+  //   ).then((message) {
+  //     if (message != 'success') return Info.error(message);
+
+  //     //success
+  //     Info.success('Success Change Email');
+  //     Info.success(
+  //         'Konfirmasi Perubahan Email dikirimkan \nke Email Terbaru Anda');
+  //     Future.delayed(const Duration(milliseconds: 1500), () {
+  //       DSession.removeUser().then((removed) {
+  //         if (!removed) return;
+  //         Navigator.pushReplacementNamed(context, '/signin');
+  //       });
+  //     });
+  //   });
+  // }
+
+  editNameOnly() {
     if (edtEmail.text == '') return Info.error('Email must be filled');
     if (edtName.text == '') return Info.error('Name must be filled');
     if (edtUID.text == '') return Info.error('Name must be filled');
 
-    // Info.netral('Loading..');
-    // AuthSource.changePassword(
-    //   edtPasswordLama.text,
-    //   edtPasswordBaru.text,
-    //   edtEmail.text,
-    // ).then((message) {
-    //   if (message != 'success') return Info.error(message);
+    Info.netral('Loading..');
+    AuthSource.editNameOnly(edtName.text, account).then((message) {
+      if (message != 'success') return Info.error(message);
 
-    //   //success
-    //   Info.success('Success Change Password');
-    //   Future.delayed(const Duration(milliseconds: 1500), () {
-    //     DSession.removeUser().then((removed) {
-    //       if (!removed) return;
-    //       Navigator.pushReplacementNamed(context, '/signin');
-    //     });
-    //   });
-    // });
+      //success
+      Info.success('Success Change Name');
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        // Navigator.pop(context);
+        // Navigator.pushReplacementNamed(context, '/discover');
+        Navigator.restorablePushNamedAndRemoveUntil(
+          context,
+          '/discover',
+          (route) => route.settings.name == '/discover',
+        );
+      });
+    });
   }
 
   @override
@@ -151,7 +179,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 editingController: edtEmail,
                 icon: 'assets/ic_email.png',
                 hint: 'Write real email',
-                enable: false,
               ),
               const Gap(20),
               const Text(
@@ -169,7 +196,31 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 hint: 'Write real name',
               ),
               const Gap(30),
-              ButtonPrimary(text: 'Simpan Perubahan', onTap: editProfile),
+              ButtonPrimary(
+                  text: 'Simpan Perubahan',
+                  onTap: () {
+                    if (edtEmail.text == widget.account.email &&
+                        edtName.text == widget.account.name) {
+                      debugPrint('email&name sama');
+                    } else if (edtEmail.text != widget.account.email &&
+                        edtName.text != widget.account.name) {
+                      debugPrint('email&name tidak sama #type1');
+                      //update email serta update name kemudian logout
+                      // -> source resetEmail + source changeAccount
+                      //source signin kemudian session tulis email
+                    } else if (edtEmail.text != widget.account.email &&
+                        edtName.text == widget.account.name) {
+                      debugPrint('email tidak sama & name sama #type2');
+                      //update email kemudian logout -> source resetEmail
+                      //source signin kemudian session tulis email
+                    } else if (edtEmail.text == widget.account.email &&
+                        edtName.text != widget.account.name) {
+                      editNameOnly();
+                      debugPrint('email sama & name tidak sama #type3');
+                      //update name kemudian tulis ulang session name
+                      //source changeAccount kemudian session tulis name
+                    }
+                  }),
               const Gap(30),
             ],
           ),

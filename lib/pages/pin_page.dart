@@ -207,20 +207,24 @@ class _PINPageState extends State<PINPage> {
               ),
             ),
           ),
-          Container(
+          const SizedBox(
             height: 46,
             width: 46,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-            ),
-            alignment: Alignment.center,
-            child: Image.asset(
-              'assets/ic_more.png',
-              height: 24,
-              width: 24,
-            ),
-          ),
+          )
+          // Container(
+          //   height: 46,
+          //   width: 46,
+          //   decoration: const BoxDecoration(
+          //     shape: BoxShape.circle,
+          //     color: Colors.white,
+          //   ),
+          //   alignment: Alignment.center,
+          //   child: Image.asset(
+          //     'assets/ic_more.png',
+          //     height: 24,
+          //     width: 24,
+          //   ),
+          // ),
         ],
       ),
     );

@@ -18,6 +18,7 @@ class _BookingPageState extends State<BookingPage> {
   final edtName = TextEditingController();
   final edtStartDate = TextEditingController();
   final edtEndDate = TextEditingController();
+  int? _selectedIndex;
 
   pickDate(TextEditingController editingController) {
     showDatePicker(
@@ -144,6 +145,7 @@ class _BookingPageState extends State<BookingPage> {
 
   Widget buildAgency() {
     final listAgency = ['Revolte', 'KBP City', 'Sumedap'];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -165,40 +167,53 @@ class _BookingPageState extends State<BookingPage> {
             scrollDirection: Axis.horizontal,
             itemCount: listAgency.length,
             itemBuilder: (context, index) {
-              return Container(
-                width: 120,
-                margin: EdgeInsets.only(
-                  left: index == 0 ? 24 : 8,
-                  right: index == listAgency.length - 1 ? 24 : 8,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  border: index == 1
-                      ? Border.all(
-                          width: 3,
-                          color: const Color(0xff4A1DFF),
-                        )
-                      : null,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/agency.png',
-                      width: 38,
-                      height: 38,
-                    ),
-                    const Gap(10),
-                    Text(
-                      listAgency[index],
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xff070623),
+              return GestureDetector(
+                onTap: () {
+                  debugPrint(index.toString());
+                  setState(() {
+                    if (_selectedIndex == index) {
+                      // <-- HERE
+                      _selectedIndex = null;
+                    } else {
+                      _selectedIndex = index;
+                    }
+                  });
+                },
+                child: Container(
+                  width: 120,
+                  margin: EdgeInsets.only(
+                    left: index == 0 ? 24 : 8,
+                    right: index == listAgency.length - 1 ? 24 : 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    border: _selectedIndex == index
+                        ? Border.all(
+                            width: 3,
+                            color: const Color(0xff4A1DFF),
+                          )
+                        : null,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/agency.png',
+                        width: 38,
+                        height: 38,
                       ),
-                    ),
-                  ],
+                      const Gap(10),
+                      Text(
+                        listAgency[index],
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xff070623),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
@@ -371,20 +386,24 @@ class _BookingPageState extends State<BookingPage> {
               ),
             ),
           ),
-          Container(
+          const SizedBox(
             height: 46,
             width: 46,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-            ),
-            alignment: Alignment.center,
-            child: Image.asset(
-              'assets/ic_more.png',
-              height: 24,
-              width: 24,
-            ),
-          ),
+          )
+          // Container(
+          //   height: 46,
+          //   width: 46,
+          //   decoration: const BoxDecoration(
+          //     shape: BoxShape.circle,
+          //     color: Colors.white,
+          //   ),
+          //   alignment: Alignment.center,
+          //   child: Image.asset(
+          //     'assets/ic_more.png',
+          //     height: 24,
+          //     width: 24,
+          //   ),
+          // ),
         ],
       ),
     );
